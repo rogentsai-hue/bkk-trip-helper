@@ -6,11 +6,13 @@
   <meta name="theme-color" content="#0284c7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BKK Trip">
   <title>BKK Trip</title>
   
-  <!-- iOS 專用高清 App 封面圖示 (Base64 PNG 格式) -->
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAA5PSURBVHic7Z3bchtFEIa/nplZ..." id="app-icon">
-  <link rel="icon" type="image/jpeg" href="./icon.jpg">
+  <!-- iOS 專用標準 PNG 圖示連結 (必須是 .png 格式) -->
+  <link rel="apple-touch-icon" href="/icon.png">
+  <link rel="apple-touch-icon-precomposed" href="/icon.png">
+  <link rel="icon" type="image/png" href="/icon.png">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
@@ -21,8 +23,7 @@
     <!-- 頂部 Header -->
     <header class="sticky top-0 z-50 bg-sky-600 text-white p-4 shadow flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <!-- 頂部頭像小圖示，確認圖片正常讀取 -->
-        <img src="./icon.jpg" class="w-9 h-9 rounded-full border border-white/40 object-cover object-top shadow-sm" onerror="this.style.display='none'">
+        <img src="/icon.png" class="w-9 h-9 rounded-full border border-white/40 object-cover object-top shadow-sm" onerror="this.style.display='none'">
         <div>
           <h1 class="text-lg font-bold tracking-wide">Bangkok Trip</h1>
           <p class="text-[11px] text-sky-100">Rogen & Dingray 曼谷隨身行程</p>
@@ -221,31 +222,12 @@
   </div>
 
   <script>
-    const { createApp, ref, computed, onMounted } = Vue;
+    const { createApp, ref, computed } = Vue;
 
     createApp({
       setup() {
         const activeTab = ref('itinerary');
         const selectedDayIdx = ref(0);
-
-        // 自動將上傳的 icon.jpg 載入並轉換為 iOS 標準圖標
-        onMounted(() => {
-          const img = new Image();
-          img.crossOrigin = 'Anonymous';
-          img.src = './icon.jpg';
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 180;
-            canvas.height = 180;
-            const ctx = canvas.getContext('2d');
-            // 裁切正方形特寫
-            const size = Math.min(img.width, img.height);
-            ctx.drawImage(img, (img.width - size)/2, (img.height - size)/3, size, size, 0, 0, 180, 180);
-            const pngUrl = canvas.toDataURL('image/png');
-            const iconTag = document.getElementById('app-icon');
-            if (iconTag) iconTag.href = pngUrl;
-          };
-        });
 
         const days = ref([
           {
