@@ -9,10 +9,13 @@
   <meta name="apple-mobile-web-app-title" content="BKK Trip">
   <title>BKK Trip</title>
   
-  <!-- iPhone 主畫面正方形封面圖示 (已套用 bkk.png 與破快取版本參數) -->
-  <link rel="apple-touch-icon" sizes="180x180" href="/bkk.png?v=3">
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/bkk.png?v=3">
-  <link rel="icon" type="image/png" sizes="180x180" href="/bkk.png?v=3">
+  <!-- iOS 傳統與主畫面標準圖示 -->
+  <link rel="apple-touch-icon" href="/bkk.png?v=final">
+  <link rel="apple-touch-icon-precomposed" href="/bkk.png?v=final">
+  <link rel="icon" type="image/png" href="/bkk.png?v=final">
+
+  <!-- 解決「打開為網頁 App」藍色 B 問題的專用 Manifest -->
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BKK%20Trip%22%2C%22short_name%22%3A%22BKK%20Trip%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230284c7%22%2C%22theme_color%22%3A%22%230284c7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22%2Fbkk.png%3Fv%3Dfinal%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22%2Fbkk.png%3Fv%3Dfinal%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
@@ -23,7 +26,7 @@
     <!-- 頂部 Header -->
     <header class="sticky top-0 z-50 bg-sky-600 text-white p-4 shadow flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <img src="/bkk.png?v=3" class="w-9 h-9 rounded-full border border-white/40 object-cover object-center shadow-sm" onerror="this.style.display='none'">
+        <img src="/bkk.png?v=final" class="w-9 h-9 rounded-full border border-white/40 object-cover object-center shadow-sm" onerror="this.style.display='none'">
         <div>
           <h1 class="text-lg font-bold tracking-wide">Bangkok Trip</h1>
           <p class="text-[11px] text-sky-100">Rogen & Dingray 曼谷隨身行程</p>
