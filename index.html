@@ -9,10 +9,10 @@
   <meta name="apple-mobile-web-app-title" content="BKK Trip">
   <title>BKK Trip</title>
   
-  <!-- iOS 專用標準 PNG 圖示連結 (必須是 .png 格式) -->
-  <link rel="apple-touch-icon" href="/icon.png">
-  <link rel="apple-touch-icon-precomposed" href="/icon.png">
-  <link rel="icon" type="image/png" href="/icon.png">
+  <!-- iPhone 主畫面正方形封面圖示 (已套用 bkk.png 與破快取版本參數) -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/bkk.png?v=3">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/bkk.png?v=3">
+  <link rel="icon" type="image/png" sizes="180x180" href="/bkk.png?v=3">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
@@ -23,7 +23,7 @@
     <!-- 頂部 Header -->
     <header class="sticky top-0 z-50 bg-sky-600 text-white p-4 shadow flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <img src="/icon.png" class="w-9 h-9 rounded-full border border-white/40 object-cover object-top shadow-sm" onerror="this.style.display='none'">
+        <img src="/bkk.png?v=3" class="w-9 h-9 rounded-full border border-white/40 object-cover object-center shadow-sm" onerror="this.style.display='none'">
         <div>
           <h1 class="text-lg font-bold tracking-wide">Bangkok Trip</h1>
           <p class="text-[11px] text-sky-100">Rogen & Dingray 曼谷隨身行程</p>
