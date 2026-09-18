@@ -6,15 +6,11 @@
   <meta name="theme-color" content="#0284c7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Bangkok Trip 曼谷旅遊隨身助手</title>
+  <title>曼谷隨身助手 - Rogen & Dingray</title>
   
-  <!-- Web App Manifest (可內嵌) -->
-  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQmFuZ2tvayBUcmlwIiwiY29sb3IiOiIjMDI4NGM3Iiwic3RhcnRfdXJsIjoiLi8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSJ9">
-  
-  <!-- Tailwind CSS & Lucide Icons & Vue 3 -->
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQmFuZ2tvayBUcmlwIiwic2hvcnRfbmFtZSI6Iua8m+iwtuihjOeoiyIsInN0YXJ0X3VybCI6Ii4vIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzAyODRjNyIsInRoZW1lX2NvbG9yIjoiIzAyODRjNyJ9">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans pb-24">
   <div id="app" class="max-w-md mx-auto min-h-screen bg-slate-50 shadow-md">
@@ -23,74 +19,74 @@
     <header class="sticky top-0 z-50 bg-sky-600 text-white p-4 shadow flex items-center justify-between">
       <div>
         <h1 class="text-xl font-bold tracking-wide">🇹🇭 Bangkok Trip</h1>
-        <p class="text-xs text-sky-100">隨身行程、自駕導航與記帳助理</p>
+        <p class="text-xs text-sky-100">Rogen & Dingray 曼谷自由行</p>
       </div>
-      <button @click="installApp" v-if="deferredPrompt" class="bg-sky-700 px-2 py-1 text-xs rounded shadow">安裝App</button>
+      <span class="text-xs bg-sky-700/70 border border-sky-400/40 px-2.5 py-1 rounded-full font-mono">9/26 - 10/3</span>
     </header>
 
     <!-- TAB 1: 每日行程 -->
     <main v-if="activeTab === 'itinerary'" class="p-4 space-y-4">
-      <!-- 日期切換 Tab -->
+      <!-- 日期滑動切換 -->
       <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
         <button 
           v-for="(day, idx) in days" :key="idx"
           @click="selectedDayIdx = idx"
-          :class="['px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all shadow-sm', 
-                   selectedDayIdx === idx ? 'bg-sky-600 text-white shadow-sky-200' : 'bg-white text-slate-600']">
+          :class="['px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all shadow-sm', 
+                   selectedDayIdx === idx ? 'bg-sky-600 text-white shadow-sky-200' : 'bg-white text-slate-600 border border-slate-200/60']">
           {{ day.dateLabel }}
         </button>
       </div>
 
       <!-- 當日天氣區塊 -->
-      <div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-2xl p-4 shadow-sm flex items-center justify-between">
+      <div class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white rounded-2xl p-4 shadow-sm flex items-center justify-between">
         <div>
           <div class="text-xs text-sky-100">曼谷即時預報 ({{ currentDay.date }})</div>
           <div class="text-2xl font-bold mt-1">{{ currentDay.weather.temp }}°C・{{ currentDay.weather.condition }}</div>
-          <div class="text-xs text-sky-100 mt-1">濕度 {{ currentDay.weather.humidity }}% | 降雨機率 {{ currentDay.weather.rainPop }}%</div>
+          <div class="text-xs text-sky-100 mt-1">降雨機率 {{ currentDay.weather.rainPop }}% | 濕度 {{ currentDay.weather.humidity }}%</div>
         </div>
         <div class="text-4xl">{{ currentDay.weather.icon }}</div>
       </div>
 
-      <!-- 行程卡片列表 -->
+      <!-- 行程卡片清單 -->
       <div class="space-y-4">
-        <div v-for="(item, i) in currentDay.items" :key="i" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 relative">
-          <!-- 分類標籤 & 時間 -->
+        <div v-for="(item, i) in currentDay.items" :key="i" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70 relative">
+          <!-- 分類標籤與時間 -->
           <div class="flex items-center justify-between mb-2">
-            <span :class="['text-xs px-2.5 py-1 rounded-full font-bold', getCategoryStyle(item.type)]">
+            <span :class="['text-xs px-2.5 py-0.5 rounded-md font-bold', getCategoryStyle(item.type)]">
               {{ item.type }}
             </span>
-            <span class="text-xs font-medium text-slate-600">{{ item.time }}</span>
+            <span class="text-xs font-semibold text-slate-500 font-mono">{{ item.time }}</span>
           </div>
 
-          <!-- 名稱與導航按鈕 -->
+          <!-- 標題與導航按鈕 -->
           <div class="flex items-start justify-between gap-2 mt-1">
-            <h3 class="font-bold text-base text-slate-800">{{ item.title }}</h3>
+            <h3 class="font-bold text-base text-slate-800 leading-snug">{{ item.title }}</h3>
             <a :href="getNavigationUrl(item.locationQuery)" target="_blank" 
                class="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm font-semibold transition shrink-0">
               🧭 導航
             </a>
           </div>
 
-          <!-- 重要預約代號 Highlight -->
-          <div v-if="item.bookingCode" class="mt-2.5 bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-mono flex items-center justify-between">
-            <span>預約代號: <strong class="text-amber-900 text-sm tracking-wider">{{ item.bookingCode }}</strong></span>
-            <button @click="copyText(item.bookingCode)" class="text-xs text-amber-600 hover:underline">複製</button>
+          <!-- 預約代號 Highlight -->
+          <div v-if="item.bookingCode" class="mt-2.5 bg-amber-50 border border-amber-200 text-amber-900 text-xs px-3 py-1.5 rounded-lg font-mono flex items-center justify-between">
+            <span>預約代號: <strong class="text-amber-800 text-sm tracking-wider font-bold">{{ item.bookingCode }}</strong></span>
+            <button @click="copyText(item.bookingCode)" class="text-xs text-amber-700 font-sans underline">複製</button>
           </div>
 
-          <!-- 景點故事 & 攻略 -->
-          <p class="text-xs text-slate-600 mt-2 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <!-- 景點/餐廳攻略故事 -->
+          <p class="text-xs text-slate-600 mt-2.5 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
             {{ item.story }}
           </p>
 
-          <!-- 必吃/必買/攻略亮顯標籤 -->
+          <!-- 攻略亮顯標籤 -->
           <div class="mt-3 flex flex-wrap gap-1.5">
-            <span v-for="tag in item.mustEat" class="text-[11px] bg-rose-50 text-rose-600 border border-rose-200 px-2 py-0.5 rounded-md font-medium">
-              🍜 必吃: <strong>{{ tag }}</strong>
+            <span v-for="tag in item.mustEat" class="text-[11px] bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded-md font-medium">
+              🍜 必點: <strong>{{ tag }}</strong>
             </span>
-            <span v-for="tag in item.mustBuy" class="text-[11px] bg-purple-50 text-purple-600 border border-purple-200 px-2 py-0.5 rounded-md font-medium">
+            <span v-for="tag in item.mustBuy" class="text-[11px] bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-md font-medium">
               🛍️ 必買: <strong>{{ tag }}</strong>
             </span>
-            <span v-for="tag in item.tips" class="text-[11px] bg-indigo-50 text-indigo-600 border border-indigo-200 px-2 py-0.5 rounded-md font-medium">
+            <span v-for="tag in item.tips" class="text-[11px] bg-sky-50 text-sky-700 border border-sky-200 px-2 py-0.5 rounded-md font-medium">
               💡 {{ tag }}
             </span>
           </div>
@@ -98,154 +94,269 @@
       </div>
     </main>
 
-    <!-- TAB 2: 行程工具箱 (航班、住宿、急難救助、記帳) -->
+    <!-- TAB 2: 行程工具箱 -->
     <main v-if="activeTab === 'tools'" class="p-4 space-y-4">
-      <!-- 航班與住宿資訊 -->
-      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+      <!-- 航班資訊 -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
         <h2 class="font-bold text-sm text-slate-800 mb-3 flex items-center gap-1.5">
-          ✈️ 航班 & 住宿資訊
+          ✈️ 兩人航班資訊 (中華航空)
         </h2>
-        <div class="space-y-2.5 text-xs text-slate-600">
+        <div class="space-y-2 text-xs">
           <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div class="font-semibold text-slate-800">去程航班</div>
-            <div>中華航空 CI835 / 桃機 (TPE) 09:30 ➔ 蘇凡納布 (BKK) 12:15</div>
-            <div class="text-slate-600 mt-1 font-mono">訂位代號: <strong class="text-sky-600">ABC123XYZ</strong></div>
+            <div class="font-bold text-slate-800 flex justify-between">
+              <span>Dingray 先行出發 (CI833)</span>
+              <span class="text-sky-600 font-mono">9/23 (三)</span>
+            </div>
+            <div class="text-slate-600 mt-1">台北桃園 (TPE) 07:00 ➔ 曼谷蘇凡納布 (BKK) 09:45</div>
           </div>
           <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-            <div class="font-semibold text-slate-800">住宿資訊 (Airbnb / 飯店)</div>
-            <div>Bangkok Sukhumvit Condominium / BTS Asok 站步行 5 分鐘</div>
-            <div class="mt-1">地址：Sukhumvit Soi 21, Khlong Toei Nuea, Bangkok</div>
-            <a :href="getNavigationUrl('Sukhumvit Soi 21 Bangkok')" target="_blank" class="inline-block mt-2 text-emerald-600 font-semibold underline">導航到住處</a>
+            <div class="font-bold text-slate-800 flex justify-between">
+              <span>Rogen 出發會合 (CI831)</span>
+              <span class="text-sky-600 font-mono">9/26 (六)</span>
+            </div>
+            <div class="text-slate-600 mt-1">台北桃園 (TPE) 09:25 ➔ 曼谷蘇凡納布 (BKK) 12:10</div>
           </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div class="font-bold text-slate-800 flex justify-between">
+              <span>雙人同班返台 (CI832)</span>
+              <span class="text-indigo-600 font-mono">10/3 (六)</span>
+            </div>
+            <div class="text-slate-600 mt-1">曼谷蘇凡納布 (BKK) 13:20 ➔ 台北桃園 (TPE) 18:00</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 住宿資訊 -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+            🏠 Airbnb 住宿資訊
+          </h2>
+          <a :href="getNavigationUrl('29 Soi Charoen Mit, Khlong Tan Nuea, Watthana, Bangkok')" target="_blank" 
+             class="text-xs bg-emerald-50 border border-emerald-300 text-emerald-700 px-2 py-1 rounded-lg font-bold">
+            一鍵導航回民宿
+          </a>
+        </div>
+        <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-1">
+          <div class="font-bold text-slate-800">29 Soi Charoen Mit (Ekkamai 10 巷附近)</div>
+          <div>29 Soi Charoen Mit, Khlong Tan Nuea, Watthana, Bangkok 10110</div>
+          <div class="text-slate-600 pt-1">💡 鄰近 BTS Ekkamai / Thong Lo，步行或開車前往周邊設計咖啡館極為便利。</div>
         </div>
       </section>
 
       <!-- 緊急聯絡電話 -->
-      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-        <h2 class="font-bold text-sm text-red-600 mb-3 flex items-center gap-1.5">
-          🚨 泰國緊急聯絡電話
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
+        <h2 class="font-bold text-sm text-rose-600 mb-3 flex items-center gap-1.5">
+          🚨 曼谷緊急聯絡專線
         </h2>
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <a href="tel:1155" class="p-3 bg-red-50 text-red-700 rounded-xl font-bold flex flex-col items-center">
+          <a href="tel:1155" class="p-3 bg-rose-50 border border-rose-100 text-rose-800 rounded-xl font-bold flex flex-col items-center">
             <span>觀光警察 (中文/英文)</span>
             <span class="text-base font-mono mt-0.5">📞 1155</span>
           </a>
-          <a href="tel:191" class="p-3 bg-red-50 text-red-700 rounded-xl font-bold flex flex-col items-center">
-            <span>警察報警局</span>
+          <a href="tel:191" class="p-3 bg-rose-50 border border-rose-100 text-rose-800 rounded-xl font-bold flex flex-col items-center">
+            <span>泰國警方報案</span>
             <span class="text-base font-mono mt-0.5">📞 191</span>
           </a>
-          <a href="tel:1669" class="p-3 bg-red-50 text-red-700 rounded-xl font-bold flex flex-col items-center">
-            <span>醫療急救救護車</span>
+          <a href="tel:1669" class="p-3 bg-rose-50 border border-rose-100 text-rose-800 rounded-xl font-bold flex flex-col items-center">
+            <span>救護車 / 急救中心</span>
             <span class="text-base font-mono mt-0.5">📞 1669</span>
           </a>
-          <a href="tel:+66816664006" class="p-3 bg-red-50 text-red-700 rounded-xl font-bold flex flex-col items-center">
-            <span>駐泰國代表處急難救助</span>
-            <span class="text-xs font-mono mt-0.5">📞 081-666-4006</span>
+          <a href="tel:+66816664006" class="p-3 bg-rose-50 border border-rose-100 text-rose-800 rounded-xl font-bold flex flex-col items-center text-center">
+            <span>駐泰國代表處急難</span>
+            <span class="text-[11px] font-mono mt-0.5">📞 081-666-4006</span>
           </a>
         </div>
       </section>
 
-      <!-- 記帳與預算工具 -->
-      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+      <!-- 預算與記帳本 -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/70">
         <div class="flex items-center justify-between mb-3">
           <h2 class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
-            💰 預算與記帳本
+            💰 預算與記帳清單
           </h2>
           <div class="text-xs text-slate-600 font-medium">
-            總支出: <strong class="text-rose-600 text-sm font-mono">{{ totalExpense.toLocaleString() }}</strong> THB
+            總計: <strong class="text-rose-600 text-sm font-mono">{{ totalExpense.toLocaleString() }}</strong> THB
           </div>
         </div>
 
-        <!-- 輸入欄位 -->
         <div class="flex gap-2 mb-3">
-          <input v-model="newExpense.item" placeholder="品項 (如: 芒果糯米飯)" class="flex-1 text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white outline-none">
+          <input v-model="newExpense.item" placeholder="消費項目 (例: 咖啡/油錢)" class="flex-1 text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white outline-none">
           <input v-model.number="newExpense.amount" type="number" placeholder="金額 THB" class="w-24 text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white outline-none">
-          <button @click="addExpense" class="bg-sky-600 text-white text-xs px-3 rounded-xl font-semibold shadow-sm">+</button>
+          <button @click="addExpense" class="bg-sky-600 text-white text-xs px-3.5 rounded-xl font-bold shadow-sm">+</button>
         </div>
 
-        <!-- 支出明細清單 -->
         <div class="space-y-1.5 max-h-48 overflow-y-auto">
           <div v-for="(exp, idx) in expenses" :key="idx" class="flex justify-between items-center text-xs p-2 bg-slate-50 rounded-lg">
             <span class="text-slate-700">{{ exp.item }}</span>
             <div class="flex items-center gap-3">
-              <span class="font-mono font-semibold text-slate-900">{{ exp.amount }} THB</span>
-              <button @click="removeExpense(idx)" class="text-slate-600 hover:text-red-500">✕</button>
+              <span class="font-mono font-bold text-slate-900">{{ exp.amount }} THB</span>
+              <button @click="removeExpense(idx)" class="text-slate-400 hover:text-rose-600">✕</button>
             </div>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- 底部固定導航欄 -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur border-t border-slate-200 py-2 flex justify-around shadow-lg z-50">
+    <!-- 底部切換導航 -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur border-t border-slate-200 py-2.5 flex justify-around shadow-lg z-50">
       <button @click="activeTab = 'itinerary'" 
-              :class="['flex flex-col items-center text-xs font-semibold', activeTab === 'itinerary' ? 'text-sky-600' : 'text-slate-600']">
-        <span class="text-lg">🗺️</span>
+              :class="['flex flex-col items-center text-xs font-bold', activeTab === 'itinerary' ? 'text-sky-600' : 'text-slate-400']">
+        <span class="text-base">🗺️</span>
         <span>每日行程</span>
       </button>
       <button @click="activeTab = 'tools'" 
-              :class="['flex flex-col items-center text-xs font-semibold', activeTab === 'tools' ? 'text-sky-600' : 'text-slate-600']">
-        <span class="text-lg">🧰</span>
-        <span>旅行工具箱</span>
+              :class="['flex flex-col items-center text-xs font-bold', activeTab === 'tools' ? 'text-sky-600' : 'text-slate-400']">
+        <span class="text-base">🧰</span>
+        <span>行程資訊箱</span>
       </button>
     </nav>
   </div>
 
   <script>
-    const { createApp, ref, computed, onMounted } = Vue;
+    const { createApp, ref, computed } = Vue;
 
     createApp({
       setup() {
         const activeTab = ref('itinerary');
         const selectedDayIdx = ref(0);
-        const deferredPrompt = ref(null);
 
-        // 範例行程資料 (支援景點、餐廳、交通分類，及亮顯標籤)
         const days = ref([
           {
-            dateLabel: 'Day 1 (9/26)',
+            dateLabel: 'Day 1 (9/26 六)',
             date: '9月26日',
-            weather: { temp: 32, condition: '午後雷陣雨', humidity: 78, rainPop: 60, icon: '⛈️' },
+            weather: { temp: 32, condition: '多雲偶雨', humidity: 76, rainPop: 40, icon: '⛅' },
             items: [
               {
                 type: '交通',
-                time: '12:30',
-                title: '蘇凡納布機場 (BKK) 取車自駕',
-                locationQuery: 'Suvarnabhumi Airport Car Rental',
-                bookingCode: 'HERTZ-TH-9821',
-                story: '取車時確認租車單包含 CDW 全險。泰國是右駕靠左行駛，注意高速公路收費站 (Easy Pass vs 灰色現金車道)。',
+                time: '12:10 - 13:40',
+                title: '蘇凡納布機場 (BKK) 接機會合與取車自駕',
+                locationQuery: 'Suvarnabhumi Airport Car Rental Bangkok',
+                bookingCode: '',
+                story: 'Rogen 航班 CI831 於 12:10 降落，Dingray 前來會合。取車自駕前往素坤逸市區，請注意右駕靠左以及快速道路收費站（灰色車道為人工現金收費）。',
                 mustEat: [],
                 mustBuy: [],
-                tips: ['靠左行駛', '自備泰銖現金過路費']
+                tips: ['靠左行駛', '備妥 50/100 泰銖現金繳高速公路過路費']
               },
               {
-                type: '餐廳',
+                type: '住宿',
                 time: '14:30',
-                title: 'Savoey Seafood (尚味泰海鮮)',
-                locationQuery: 'Savoey Seafood Sukhumvit 26',
-                bookingCode: 'SAVOEY-BKK-04',
-                story: '超過 50 年老字號海鮮餐廳，招牌黃金咖哩螃蟹將蛋液與咖哩香料完美結合。',
-                mustEat: ['黃金咖哩炒蟹', '泰式生蝦', '香蕉花沙拉'],
+                title: 'Airbnb Check-in 放行李',
+                locationQuery: '29 Soi Charoen Mit, Khlong Tan Nuea, Watthana, Bangkok',
+                bookingCode: '',
+                story: '位於伊卡邁 Soi Charoen Mit 的靜謐巷弄內，周邊遍佈潮流咖啡館與風格選品店，地理位置極佳。',
+                mustEat: [],
                 mustBuy: [],
-                tips: ['蟹肉可請廚房代為去殼 (方便吃)']
+                tips: ['巷內會車慢行，留意停車位']
               },
               {
-                type: '景點',
-                time: '18:00',
-                title: 'ICONSIAM 暹羅天地 (室內水上市場)',
-                locationQuery: 'ICONSIAM Bangkok',
+                type: '咖啡廳',
+                time: '15:30',
+                title: 'Eich.bkk (極簡黑白美學咖啡)',
+                locationQuery: '73 Ekkamai 10 Alley, Khlong Tan Nuea, Watthana, Bangkok',
                 bookingCode: '',
-                story: '斥資 540 億泰銖打造，G 樓將泰國 77 府的水上市場與傳統工藝直接搬進冷氣商場中。',
-                mustEat: ['碳烤香蕉', '泰式傳統香脆可麗餅 (Khanom Buang)'],
-                mustBuy: ['手標泰奶茶包', '香氛品牌 Karmakamet'],
-                tips: ['商場提供免費室內停車 2 小時']
+                story: '就在民宿巷口附近！Ekkamai 10 巷極具設計感的黑色系當代工業風空間，選豆極有水準，是曼谷咖啡愛好者私藏清單。',
+                mustEat: ['特調 Dirty', '手沖單品咖啡 (Filter Coffee)', '巴斯克乳酪蛋糕'],
+                mustBuy: ['自烘咖啡豆 (Single Origin Beans)'],
+                tips: ['室內採光極佳，黑白幾何光影極適合拍照']
+              },
+              {
+                type: '商場',
+                time: '18:00',
+                title: 'EmSphere 潮流新商場巡航 & 晚餐',
+                locationQuery: '628 Sukhumvit Rd, Khlong Tan, Khlong Toei, Bangkok',
+                bookingCode: '',
+                story: '2023底曼谷最轟動的地標「The EM District」壓軸巨作！結合工業前衛裝潢、全球第一座市中心 IKEA 以及營業至深夜的餐飲潮流聚落。',
+                mustEat: ['Butterbear 奶油熊甜點', 'Shake Shack', 'Nayok 泰式米粉湯'],
+                mustBuy: ['G樓泰國設計師品牌選品', '限量香氛周邊'],
+                tips: ['商場停車便利，地下超市聚集全泰國頂級果乾伴手禮']
               }
             ]
           },
           {
-            dateLabel: 'Day 2 (9/27)',
+            dateLabel: 'Day 2 (9/27 日)',
             date: '9月27日',
-            weather: { temp: 33, condition: '多雲時晴', humidity: 72, rainPop: 30, icon: '⛅' },
+            weather: { temp: 33, condition: '多雲晴天', humidity: 70, rainPop: 20, icon: '🌤️' },
+            items: [
+              {
+                type: '咖啡廳',
+                time: '10:00',
+                title: 'BENKOFF 通羅店',
+                locationQuery: '195 NT TOWER Thong Lo, Khlong Tan Nuea, Watthana, Bangkok',
+                bookingCode: '',
+                story: '坐落在 NT Tower 的溫暖系復古質感咖啡館，招牌可愛柯基標誌與經典木質色調，咖啡萃取與奶香調配細緻平衡。',
+                mustEat: ['經典熱拿鐵 (Latte)', '招牌肉桂捲 (Cinnamon Roll)', '燕麥奶 Dirty'],
+                mustBuy: ['BENKOFF 狗狗周邊馬克杯 / 帆布袋'],
+                tips: ['NT Tower 附設訪客停車位，可請店家蓋停車章']
+              },
+              {
+                type: '景點',
+                time: '14:00',
+                title: '洽圖洽週末市集 (Chatuchak Weekend Market)',
+                locationQuery: 'Chatuchak Weekend Market Bangkok',
+                bookingCode: '',
+                story: '全球最大的週末露天市集，超過 15,000 個攤位，從手作泰國香氛、古著服飾到原創藝術品應有盡有。',
+                mustEat: ['椰子冰淇淋', '炭烤香蕉', '手標泰式奶茶'],
+                mustBuy: ['純精油香氛', '手工編織包', '香氛擴香石'],
+                tips: ['建議停在市集旁的 Mixt Chatuchak 購物中心冷氣停車場']
+              },
+              {
+                type: '餐廳',
+                time: '18:30',
+                title: 'Lay Lao - Silom (米其林必比登推薦泰東北菜)',
+                locationQuery: '56 Silom Rd (Yada Building), Bangkok',
+                bookingCode: '',
+                story: '源自華欣海濱的米其林必比登推薦名店！將泰國依善（Isan）風味與華欣新鮮海產完美揉合，調味鮮香酸辣、層次極高。',
+                mustEat: ['招牌炭烤生醃小卷 (Grilled Squid)', '酸辣涼拌青木瓜絲 (Som Tum)', '脆皮炸五花肉', '蟹肉炒飯'],
+                mustBuy: [],
+                tips: ['Yada Building 附設地下停車場，餐點辣度偏正宗可向服務生選微辣']
+              }
+            ]
+          },
+          {
+            dateLabel: 'Day 3 (9/28 一)',
+            date: '9月28日',
+            weather: { temp: 32, condition: '午後局部雷雨', humidity: 75, rainPop: 45, icon: '⛈️' },
+            items: [
+              {
+                type: '景點',
+                time: '11:00',
+                title: '曼谷石龍軍路 (Charoen Krung) 老城藝術街區',
+                locationQuery: 'Warehouse 30 Charoen Krung Bangkok',
+                bookingCode: '',
+                story: '曼谷最早開通的現代馬路，沿途有 Warehouse 30 舊倉庫改造文創園區與 Central The Original Store，充滿老上海與南洋交織的歷史韻味。',
+                mustEat: ['老城古法手作小吃'],
+                mustBuy: ['Warehouse 30 獨立設計師明信片與飾品'],
+                tips: ['小巷狹窄，建議先將車停在河岸商場或飯店收費停車場再漫步']
+              },
+              {
+                type: '餐廳',
+                time: '13:00',
+                title: 'Mazzaro Boutique and Restaurant',
+                locationQuery: '11/2 Charoen Krung 42/1 Alley, Bang Rak, Bangkok',
+                bookingCode: '',
+                story: '隱身在石龍軍路綠意小巷內的精品意式與泰式餐酒館！招牌義大利麵將經典羅勒香料與海鮮、義式醬汁完美結合，裝潢兼具東方華麗與優雅氣質。',
+                mustEat: ['招牌龍蝦/海鮮黑松露義大利麵', '蒜辣海鮮義大利麵', '手工窯烤薄餅披薩', '經典提拉米蘇'],
+                mustBuy: [],
+                tips: ['Charoen Krung 42/1 巷口較窄，可就近停在 Shangri-La 或周邊公有停車處']
+              },
+              {
+                type: '景點',
+                time: '18:00',
+                title: 'ICONSIAM 暹羅天地 (室內水上市場 & 昭披耶河景)',
+                locationQuery: 'ICONSIAM Bangkok',
+                bookingCode: '',
+                story: '耗資 540 億泰銖打造的旗艦地標，G 樓把泰國 77 府傳統水上市場搬入室內，戶外露台可俯瞰迷人的昭披耶河黃昏美景。',
+                mustEat: ['泰式香脆可麗餅 (Khanom Buang)', '現剖泰國香水椰子'],
+                mustBuy: ['ICONCRAFT 泰國國寶級工藝品', 'Karmakamet 香氛'],
+                tips: ['室內停車位充裕，戶外有水舞燈光秀']
+              }
+            ]
+          },
+          {
+            dateLabel: 'Day 4 (9/29 二)',
+            date: '9月29日',
+            weather: { temp: 34, condition: '多雲時晴', humidity: 68, rainPop: 30, icon: '⛅' },
             items: [
               {
                 type: '景點',
@@ -253,21 +364,170 @@
                 title: '鄭王廟 (Wat Arun / 黎明寺)',
                 locationQuery: 'Wat Arun Bangkok',
                 bookingCode: '',
-                story: '大城時期所建，主塔高達 82 米，塔身鑲嵌大量彩色陶瓷片，在朝陽與夕陽照射下格外耀眼。',
-                mustEat: ['鄭王廟限定花磚冰棒'],
-                mustBuy: ['泰服寫真周邊'],
-                tips: ['服裝需穿著過膝長褲或裙子，不得露肩']
+                story: '聳立於湄南河畔的純白大乘舍利塔，塔身鑲滿彩色陶瓷片，幾何構圖在晨光下呈現宏偉而神聖的視覺震撼。',
+                mustEat: ['鄭王廟限量青花瓷花磚冰棒'],
+                mustBuy: [],
+                tips: ['服裝需穿著過膝長褲或長裙，禁止露肩露背']
+              },
+              {
+                type: '咖啡廳',
+                time: '14:30',
+                title: '通羅 & 伊卡邁設計選品店散策',
+                locationQuery: 'The Commons Thonglor Bangkok',
+                bookingCode: '',
+                story: '回宿所周邊漫步前往 The Commons Thonglor，這是一座由清水模與階梯平台構成的半戶外垂直社區，聚集了頂尖手沖咖啡與獨立設計選品。',
+                mustEat: ['Roast 手沖咖啡', '精品雪花冰'],
+                mustBuy: ['泰國獨立香氛蠟燭', '文創插畫杯墊'],
+                tips: ['半開放通風天井設計，午後伴隨微風非常愜意']
               },
               {
                 type: '餐廳',
-                time: '12:30',
-                title: 'Thip Samai (鬼門炒河粉)',
-                locationQuery: 'Thip Samai Pad Thai Pratu Phi',
+                time: '18:30',
+                title: 'Here Hai (米其林必比登巨量蟹肉炒飯)',
+                locationQuery: 'Here Hai Restaurant Bangkok',
                 bookingCode: '',
-                story: '曼谷最具代表性的泰式炒河粉名店，以薄煎蛋皮包裹河粉、加入濃郁蝦油炭火拌炒聞名。',
-                mustEat: ['招牌蝦油蛋包炒河粉 (Superb Pad Thai)', '帶果肉鮮榨橙汁'],
+                story: '就在 Ekkamai 路上！以豪邁覆蓋整盤爆炒蟹肉、爆香皮皮蝦炒飯聞名全球的米其林傳奇餐廳。',
+                mustEat: ['招牌巨量蟹肉炒飯 (Crab Fried Rice)', '香蒜黑胡椒皮皮蝦', '香脆炸五花肉'],
                 mustBuy: [],
-                tips: ['店內橙汁每日依柳橙時價計費，必點']
+                tips: ['建議提前抵達或請 Airbnb 房東提早協助預約抽號碼牌']
+              }
+            ]
+          },
+          {
+            dateLabel: 'Day 5 (9/30 三)',
+            date: '9月30日',
+            weather: { temp: 33, condition: '晴朗微熱', humidity: 65, rainPop: 20, icon: '☀️' },
+            items: [
+              {
+                type: '景點',
+                time: '10:30',
+                title: 'Jim Thompson House (金湯普森泰絲傳奇故居)',
+                locationQuery: 'Jim Thompson House Museum Bangkok',
+                bookingCode: '',
+                story: '將泰絲推向國際舞台的美軍傳奇人物故居。六棟高腳泰式傳統柚木古建築巧妙結合西方古典收藏，庭園綠意蓊鬱。',
+                mustEat: ['博物館綠洲庭園泰式冷飲'],
+                mustBuy: ['Jim Thompson 頂級純泰絲絲巾 / 領帶 / 零錢包'],
+                tips: ['園區附設專用免費停車場，入內有專業導覽']
+              },
+              {
+                type: '商場',
+                time: '14:30',
+                title: 'Central World 旗艦商圈採買日',
+                locationQuery: 'Central World Bangkok',
+                bookingCode: '',
+                story: '東南亞最大購物複合體之一，從頂級國際品牌到各類泰國原創手作品牌一站購足。',
+                mustEat: ['Nara Thai Cuisine 泰式炒河粉', 'After You 蜜糖吐司'],
+                mustBuy: ['Gentlewoman 帆布包', 'Boots 皇家蜂蜜 / 皇家牛奶片'],
+                tips: ['對面即是 Big C Supercenter，採買各類零食最方便']
+              },
+              {
+                type: '景點',
+                time: '19:00',
+                title: 'Tichuca Rooftop Bar (水母空中酒吧)',
+                locationQuery: 'Tichuca Rooftop Bar T-One Building Bangkok',
+                bookingCode: '',
+                story: '位於 T-One 大樓 46 樓的高空叢林酒吧，最著名的巨型發光 LED 水母樹隨風搖曳，能 360 度俯瞰整個曼谷都會夜景。',
+                mustEat: ['招牌百香果熱帶調酒', '新鮮椰子雞尾酒'],
+                mustBuy: [],
+                tips: ['著正式休閒服（禁止拖鞋短褲背心），需攜帶護照或護照照片備查']
+              }
+            ]
+          },
+          {
+            dateLabel: 'Day 6 (10/1 四)',
+            date: '10月1日',
+            weather: { temp: 32, condition: '多雲偶短暫雨', humidity: 74, rainPop: 35, icon: '⛅' },
+            items: [
+              {
+                type: '景點',
+                time: '10:00',
+                title: '美功鐵道市場 & 安帕瓦水上市場自駕一日遊',
+                locationQuery: 'Maeklong Railway Market Samut Songkhram',
+                bookingCode: '',
+                story: '自駕往曼谷西南方約 1.5 小時，目睹火車緩緩切過攤販棚架的震撼奇景，下午前往安帕瓦感受水道木造老屋風情。',
+                mustEat: ['炭烤大頭蝦', '椰奶小脆餅', '現剖泰國椰子糖水'],
+                mustBuy: ['美功短尾鹹魚造型零錢包', '純天然手工椰子糖'],
+                tips: ['自駕高速公路路況良好，火車進站時間約為 11:10 / 14:30']
+              },
+              {
+                type: '餐廳',
+                time: '18:30',
+                title: 'Somtum Der (米其林泰東北特色料理)',
+                locationQuery: 'Somtum Der Thonglor Bangkok',
+                bookingCode: '',
+                story: '榮獲紐約米其林一星肯定名店的曼谷分店，深耕依善傳統辣味沙拉與金黃炸雞。',
+                mustEat: ['Der 招牌炸雞翅', '鹹蛋青木瓜絲沙拉', '香茅烤豬頸肉配糯米飯'],
+                mustBuy: [],
+                tips: ['近 Thong Lo 區，自駕返回民宿順路']
+              }
+            ]
+          },
+          {
+            dateLabel: 'Day 7 (10/2 五)',
+            date: '10月2日',
+            weather: { temp: 33, condition: '晴朗多雲', humidity: 69, rainPop: 20, icon: '🌤️' },
+            items: [
+              {
+                type: '景點',
+                time: '11:00',
+                title: '曼谷當代藝術館 (MOCA Bangkok)',
+                locationQuery: 'Museum of Contemporary Art (MOCA BANGKOK)',
+                bookingCode: '',
+                story: '由泰國電信大亨打造的當代藝術私人美術館，白色極簡階梯與天井光影營造出超現實殿堂感，收藏豐富的泰國超現實主義藝術巨作。',
+                mustEat: ['MOCA 精品館內美式手沖'],
+                mustBuy: ['當代藝術明信片與展覽紀念畫冊'],
+                tips: ['附設廣大室內地下免費停車場，空間非常寬敞安靜']
+              },
+              {
+                type: '放鬆',
+                time: '15:30',
+                title: '泰式古法精油按摩舒壓',
+                locationQuery: 'Let\'s Relax Spa Thonglor Bangkok',
+                bookingCode: '',
+                story: '旅行尾聲為緊繃的自駕行程安排 2 小時泰式草藥球精油芳療，徹底放鬆肌肉。',
+                mustEat: ['療程結束後附贈的溫熱芒果糯米飯'],
+                mustBuy: ['草藥舒緩膏', '香氛沐浴精油'],
+                tips: ['需提前透過官網或電話確認預約時段']
+              },
+              {
+                type: '餐廳',
+                time: '18:30',
+                title: 'Savoey Seafood 尚味泰海鮮 (告別晚宴)',
+                locationQuery: 'Savoey Seafood Sukhumvit 26 Bangkok',
+                bookingCode: '',
+                story: '泰國 50 年老字號海鮮餐廳，在清幽的庭院水景玻璃屋中享受最經典的泰味海鮮大餐。',
+                mustEat: ['招牌黃金濃咖哩炒蟹 (可去殼)', '泰式酸辣生蝦', '冬蔭功鮮蝦湯'],
+                mustBuy: [],
+                tips: ['附設專用平整露天停車場，停車極為便利']
+              }
+            ]
+          },
+          {
+            dateLabel: 'Day 8 (10/3 六)',
+            date: '10月3日',
+            weather: { temp: 32, condition: '多雲', humidity: 70, rainPop: 20, icon: '⛅' },
+            items: [
+              {
+                type: '住宿',
+                time: '09:30',
+                title: 'Airbnb Check-out 退房',
+                locationQuery: '29 Soi Charoen Mit, Khlong Tan Nuea, Watthana, Bangkok',
+                bookingCode: '',
+                story: '檢查隨身重要證件、護照、充電器及伴手禮，整理行李準備開車前往機場。',
+                mustEat: [],
+                mustBuy: [],
+                tips: ['確認帶齊隨身貴重行李與免稅退稅單 (PP10)']
+              },
+              {
+                type: '交通',
+                time: '10:30',
+                title: '抵達蘇凡納布機場 (BKK) 還車 & 辦理登機',
+                locationQuery: 'Suvarnabhumi Airport Bangkok',
+                bookingCode: 'CI832',
+                story: '自駕還車前請於機場周邊加油站加滿油。兩人一同搭乘華航 CI832 返台，預留足夠時間辦理 VAT 退稅審查與免稅品提領。',
+                mustEat: ['機場候機室芒果糯米飯'],
+                mustBuy: ['機場免稅煙酒及泰國香氛禮盒'],
+                tips: ['13:20 起飛，務必於 11:00 前完成還車與行李托運手續']
               }
             ]
           }
@@ -275,23 +535,23 @@
 
         const currentDay = computed(() => days.value[selectedDayIdx.value]);
 
-        // 導航連結 (調用 Google Maps 導航 Scheme)
         const getNavigationUrl = (query) => {
           return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
         };
 
-        // 卡片分類樣式
         const getCategoryStyle = (type) => {
           switch (type) {
             case '景點': return 'bg-amber-100 text-amber-800';
             case '餐廳': return 'bg-rose-100 text-rose-800';
+            case '咖啡廳': return 'bg-orange-100 text-orange-800';
+            case '商場': return 'bg-purple-100 text-purple-800';
             case '交通': return 'bg-sky-100 text-sky-800';
+            case '住宿': return 'bg-emerald-100 text-emerald-800';
             default: return 'bg-slate-100 text-slate-800';
           }
         };
 
-        // 記帳本功能
-        const expenses = ref(JSON.parse(localStorage.getItem('bkk_expenses') || '[]'));
+        const expenses = ref(JSON.parse(localStorage.getItem('bkk_expenses_v2') || '[]'));
         const newExpense = ref({ item: '', amount: null });
 
         const totalExpense = computed(() => {
@@ -301,33 +561,18 @@
         const addExpense = () => {
           if (!newExpense.value.item || !newExpense.value.amount) return;
           expenses.value.unshift({ ...newExpense.value });
-          localStorage.setItem('bkk_expenses', JSON.stringify(expenses.value));
+          localStorage.setItem('bkk_expenses_v2', JSON.stringify(expenses.value));
           newExpense.value = { item: '', amount: null };
         };
 
         const removeExpense = (index) => {
           expenses.value.splice(index, 1);
-          localStorage.setItem('bkk_expenses', JSON.stringify(expenses.value));
+          localStorage.setItem('bkk_expenses_v2', JSON.stringify(expenses.value));
         };
 
         const copyText = (txt) => {
           navigator.clipboard.writeText(txt);
-          alert('預約代號已複製到剪貼簿！');
-        };
-
-        // PWA 安裝監聽
-        onMounted(() => {
-          window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt.value = e;
-          });
-        });
-
-        const installApp = () => {
-          if (deferredPrompt.value) {
-            deferredPrompt.value.prompt();
-            deferredPrompt.value = null;
-          }
+          alert('預約代號已複製到剪貼簿：' + txt);
         };
 
         return {
@@ -342,9 +587,7 @@
           totalExpense,
           addExpense,
           removeExpense,
-          copyText,
-          deferredPrompt,
-          installApp
+          copyText
         };
       }
     }).mount('#app');
