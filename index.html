@@ -9,13 +9,13 @@
   <meta name="apple-mobile-web-app-title" content="BKK Trip">
   <title>BKK Trip</title>
   
-  <!-- iOS 傳統與主畫面標準圖示 -->
-  <link rel="apple-touch-icon" href="/bkk.png?v=final">
-  <link rel="apple-touch-icon-precomposed" href="/bkk.png?v=final">
-  <link rel="icon" type="image/png" href="/bkk.png?v=final">
+  <!-- iOS 主畫面標準圖示 (指向全新壓縮後的 bkk.jpg，帶版本號防快取) -->
+  <link rel="apple-touch-icon" href="/bkk.jpg?v=final">
+  <link rel="apple-touch-icon-precomposed" href="/bkk.jpg?v=final">
+  <link rel="icon" type="image/jpeg" href="/bkk.jpg?v=final">
 
-  <!-- 解決「打開為網頁 App」藍色 B 問題的專用 Manifest -->
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BKK%20Trip%22%2C%22short_name%22%3A%22BKK%20Trip%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230284c7%22%2C%22theme_color%22%3A%22%230284c7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22%2Fbkk.png%3Fv%3Dfinal%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22%2Fbkk.png%3Fv%3Dfinal%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+  <!-- iOS 網頁 App (PWA) Manifest 設定 -->
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22BKK%20Trip%22%2C%22short_name%22%3A%22BKK%20Trip%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230284c7%22%2C%22theme_color%22%3A%22%230284c7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22%2Fbkk.jpg%3Fv%3Dfinal%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
@@ -26,7 +26,7 @@
     <!-- 頂部 Header -->
     <header class="sticky top-0 z-50 bg-sky-600 text-white p-4 shadow flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <img src="/bkk.png?v=final" class="w-9 h-9 rounded-full border border-white/40 object-cover object-center shadow-sm" onerror="this.style.display='none'">
+        <img src="/bkk.jpg?v=final" class="w-9 h-9 rounded-full border border-white/40 object-cover object-center shadow-sm" onerror="this.style.display='none'">
         <div>
           <h1 class="text-lg font-bold tracking-wide">Bangkok Trip</h1>
           <p class="text-[11px] text-sky-100">Rogen & Dingray 曼谷隨身行程</p>
@@ -455,7 +455,7 @@
                 title: 'Somtum Der (米其林泰東北特色料理)',
                 locationQuery: 'Somtum Der Thonglor Bangkok',
                 bookingCode: '',
-                story: '深獲國際肯定的泰國東北料理名店！專精道地依善風味沙拉、香脆炸雞翅與香烤豬頸肉，滋味酸辣過癮。',
+                story: '深獲國際肯定的泰料東北料理名店！專精道地依善風味沙拉、香脆炸雞翅與香烤豬頸肉，滋味酸辣過癮。',
                 mustEat: ['Der 招牌炸雞翅', '鹹蛋青木瓜絲沙拉', '香茅烤豬頸肉配糯米飯'],
                 mustBuy: [],
                 tips: ['位於 Thong Lo 區，叫車車程約 5 分鐘即可返回 Airbnb']
