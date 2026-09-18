@@ -19,7 +19,7 @@
     <header class="sticky top-0 z-50 bg-sky-600 text-white p-4 shadow flex items-center justify-between">
       <div>
         <h1 class="text-xl font-bold tracking-wide">🇹🇭 Bangkok Trip</h1>
-        <p class="text-xs text-sky-100">Rogen & Dingray 曼谷自由行</p>
+        <p class="text-xs text-sky-100">Rogen & Dingray 曼谷自由行 (叫車版)</p>
       </div>
       <span class="text-xs bg-sky-700/70 border border-sky-400/40 px-2.5 py-1 rounded-full font-mono">9/26 - 10/3</span>
     </header>
@@ -63,7 +63,7 @@
             <h3 class="font-bold text-base text-slate-800 leading-snug">{{ item.title }}</h3>
             <a :href="getNavigationUrl(item.locationQuery)" target="_blank" 
                class="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm font-semibold transition shrink-0">
-              🧭 導航
+              🧭 地圖/路線
             </a>
           </div>
 
@@ -134,13 +134,13 @@
           </h2>
           <a :href="getNavigationUrl('29 Soi Charoen Mit, Khlong Tan Nuea, Watthana, Bangkok')" target="_blank" 
              class="text-xs bg-emerald-50 border border-emerald-300 text-emerald-700 px-2 py-1 rounded-lg font-bold">
-            一鍵導航回民宿
+            查看民宿地圖定位
           </a>
         </div>
         <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-1">
           <div class="font-bold text-slate-800">29 Soi Charoen Mit (Ekkamai 10 巷附近)</div>
           <div>29 Soi Charoen Mit, Khlong Tan Nuea, Watthana, Bangkok 10110</div>
-          <div class="text-slate-600 pt-1">💡 鄰近 BTS Ekkamai / Thong Lo，步行或開車前往周邊設計咖啡館極為便利。</div>
+          <div class="text-slate-600 pt-1">💡 叫車定位請搜尋：<strong>29 Soi Charoen Mit</strong> 或鄰近地標 <strong>Ekkamai 10 Alley</strong>。</div>
         </div>
       </section>
 
@@ -181,7 +181,7 @@
         </div>
 
         <div class="flex gap-2 mb-3">
-          <input v-model="newExpense.item" placeholder="消費項目 (例: 咖啡/油錢)" class="flex-1 text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white outline-none">
+          <input v-model="newExpense.item" placeholder="消費項目 (例: Grab車資/咖啡)" class="flex-1 text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white outline-none">
           <input v-model.number="newExpense.amount" type="number" placeholder="金額 THB" class="w-24 text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white outline-none">
           <button @click="addExpense" class="bg-sky-600 text-white text-xs px-3.5 rounded-xl font-bold shadow-sm">+</button>
         </div>
@@ -230,13 +230,13 @@
               {
                 type: '交通',
                 time: '12:10 - 13:40',
-                title: '蘇凡納布機場 (BKK) 出關與自行前往市區',
+                title: '蘇凡納布機場 (BKK) 出關 & 叫車前往市區',
                 locationQuery: 'Suvarnabhumi Airport Bangkok',
                 bookingCode: 'CI831',
-                story: 'Rogen 航班 CI831 抵達。於機場取車自駕或搭乘機場快線/叫車直接前往 Airbnb 住宿點，dingray 將在民宿等待會合。自駕行車注意右駕靠左。',
+                story: 'Rogen 航班抵達，領取行李後可至機場 1 樓搭乘跳錶計程車（需抽號碼牌），或直接使用 Grab / Bolt App 叫車。前往 Ekkamai 的 Airbnb 與 dingray 會合。',
                 mustEat: [],
                 mustBuy: [],
-                tips: ['靠左行駛', '若開車走快速道路，備妥 50/100 泰銖現金繳交過路費']
+                tips: ['Grab叫車可在出境大廳外指定門號等待', '走高速公路過路費司機會在車上請乘客代付現金（約 50-75 THB）']
               },
               {
                 type: '住宿',
@@ -244,10 +244,10 @@
                 title: 'Airbnb 會合 Check-in 放行李',
                 locationQuery: '29 Soi Charoen Mit, Khlong Tan Nuea, Watthana, Bangkok',
                 bookingCode: '',
-                story: '抵達位於伊卡邁 Soi Charoen Mit 的 Airbnb 與 dingray 會合並放行李。周邊巷弄靜謐舒適，離兩間預計要去的咖啡廳都非常近。',
+                story: '抵達位於伊卡邁 Soi Charoen Mit 的 Airbnb 與 dingray 會合放行李。周邊巷弄清幽，離兩間預計要去的咖啡廳步行就能抵達。',
                 mustEat: [],
                 mustBuy: [],
-                tips: ['巷內會車慢行，確認停車位']
+                tips: ['叫車可以直接定位到門口 29 Soi Charoen Mit']
               },
               {
                 type: '咖啡廳',
@@ -255,10 +255,10 @@
                 title: 'Eich.bkk (極簡黑白美學咖啡)',
                 locationQuery: '73 Ekkamai 10 Alley, Khlong Tan Nuea, Watthana, Bangkok',
                 bookingCode: '',
-                story: '就在民宿巷口步行可達！Ekkamai 10 巷極具設計感的黑色系當代工業風空間，選豆極有水準，是曼谷咖啡愛好者必訪名單。',
+                story: '就在民宿巷口步行約 3-5 分鐘！Ekkamai 10 巷極具設計感的黑色系當代工業風空間，選豆水準極高，曼谷咖啡愛好者私藏清單。',
                 mustEat: ['特調 Dirty', '手沖單品咖啡 (Filter Coffee)', '巴斯克乳酪蛋糕'],
                 mustBuy: ['自烘咖啡豆 (Single Origin Beans)'],
-                tips: ['室內採光極佳，黑白幾何光影極適合拍照拍照']
+                tips: ['散步前往即可，室內黑白幾何光影極適合拍照']
               },
               {
                 type: '商場',
@@ -266,10 +266,10 @@
                 title: 'EmSphere 潮流新商場巡航 & 晚餐',
                 locationQuery: '628 Sukhumvit Rd, Khlong Tan, Khlong Toei, Bangkok',
                 bookingCode: '',
-                story: '曼谷熱門新地標「The EM District」壓軸巨作！結合工業前衛裝潢、全球第一座市中心 IKEA 以及營業至深夜的多元餐飲潮流聚落。',
+                story: '曼谷熱門地標「The EM District」壓軸巨作！結合前衛工業風裝潢與營業至深夜的潮流餐飲聚落。',
                 mustEat: ['Butterbear 奶油熊甜點', 'Shake Shack', 'Nayok 泰式米粉湯'],
                 mustBuy: ['G樓泰國設計師品牌選品', '限量香氛周邊'],
-                tips: ['商場停車便利，地下超市聚集全泰國頂級伴手禮']
+                tips: ['從民宿叫 Bolt/Grab 約 10-15 分鐘即可抵達商場落客區']
               }
             ]
           },
@@ -284,10 +284,10 @@
                 title: 'BENKOFF 通羅店',
                 locationQuery: '195 NT TOWER Thong Lo, Khlong Tan Nuea, Watthana, Bangkok',
                 bookingCode: '',
-                story: '坐落在 NT Tower 的溫暖系復古質感咖啡館，招牌可愛柯基標誌與經典木質色調，咖啡萃取與奶香調配細緻平衡。',
+                story: '坐落在 NT Tower 的溫暖系復古質感咖啡館，招牌可愛柯基標誌與經典木質色調，咖啡香氣濃郁，奶香平衡細緻。',
                 mustEat: ['經典熱拿鐵 (Latte)', '招牌肉桂捲 (Cinnamon Roll)', '燕麥奶 Dirty'],
                 mustBuy: ['BENKOFF 狗狗周邊馬克杯 / 帆布袋'],
-                tips: ['NT Tower 附設訪客停車位，可請店家蓋停車章']
+                tips: ['叫車定位設為 NT Tower Thong Lo，下車直走即達']
               },
               {
                 type: '景點',
@@ -295,10 +295,10 @@
                 title: '洽圖洽週末市集 (Chatuchak Weekend Market)',
                 locationQuery: 'Chatuchak Weekend Market Bangkok',
                 bookingCode: '',
-                story: '全球最大規模週末露天市集，超過 15,000 個攤位，從手作泰國香氛、古著服飾到原創藝術品應有盡有。',
+                story: '全球最大規模週末露天市集，超過 15,000 個攤位，手作泰國香氛、古著服飾到原創藝術品應有盡有。',
                 mustEat: ['椰子冰淇淋', '炭烤香蕉', '手標泰式奶茶'],
                 mustBuy: ['純精油香氛', '手工編織包', '香氛擴香石'],
-                tips: ['建議停在市集旁的 Mixt Chatuchak 購物中心冷氣停車場']
+                tips: ['叫車回程建議定位在旁邊的「Mixt Chatuchak」商場門口，司機較容易停靠接駁']
               },
               {
                 type: '餐廳',
@@ -306,10 +306,10 @@
                 title: 'Lay Lao - Silom (米其林必比登推薦泰東北菜)',
                 locationQuery: '56 Silom Rd (Yada Building), Bangkok',
                 bookingCode: '',
-                story: '源自華欣海濱的米其林必比登推薦名店！將泰國依善（Isan）風味與華欣新鮮海產完美揉合，調味鮮香酸辣、層次極高。',
+                story: '源自華欣海濱的米其林必比登推薦名店！將泰國依善（Isan）風味與華欣新鮮海產完美揉合，調味鮮香酸辣、層次豐富。',
                 mustEat: ['招牌炭烤生醃小卷 (Grilled Squid)', '酸辣涼拌青木瓜絲 (Som Tum)', '脆皮炸五花肉', '蟹肉炒飯'],
                 mustBuy: [],
-                tips: ['Yada Building 附設地下停車場，餐點辣度偏正宗可向服務生選微辣']
+                tips: ['叫車定位設為 Yada Building Silom，門口即有安全上下車臨停區']
               }
             ]
           },
@@ -324,10 +324,10 @@
                 title: '曼谷石龍軍路 (Charoen Krung) 老城藝術街區',
                 locationQuery: 'Warehouse 30 Charoen Krung Bangkok',
                 bookingCode: '',
-                story: '曼谷最早開通的現代馬路，沿途有 Warehouse 30 舊倉庫改造文創園區與 Central The Original Store，充滿老上海與南洋交織的歷史韻味。',
+                story: '曼谷最早開通的現代馬路，沿途有 Warehouse 30 舊倉庫改造文創園區與 Central The Original Store，充滿歷史韻味與街頭壁畫。',
                 mustEat: ['老城古法手作小吃'],
                 mustBuy: ['Warehouse 30 獨立設計師明信片與飾品'],
-                tips: ['小巷狹窄，建議先將車停在河岸商場或飯店收費停車場再漫步']
+                tips: ['叫車定位在 Warehouse 30 下車，巷弄間步行散策最愜意']
               },
               {
                 type: '餐廳',
@@ -335,10 +335,10 @@
                 title: 'Mazzaro Boutique and Restaurant',
                 locationQuery: '11/2 Charoen Krung 42/1 Alley, Bang Rak, Bangkok',
                 bookingCode: '',
-                story: '隱身在石龍軍路綠意小巷內的精品意式與泰式餐酒館！招牌義大利麵將經典羅勒香料與海鮮、義式醬汁完美結合，裝潢兼具東方華麗與優雅氣質。',
-                mustEat: ['招牌龍蝦/海鮮黑松露義大利麵', '蒜辣海鮮義大利麵', '手工窯烤薄餅披薩', '經典提拉米蘇'],
+                story: '隱身在石龍軍路小巷內的精品餐酒館！招牌義大利麵將泰式香料與海鮮、義式醬汁完美結合，裝潢兼具東方華麗與優雅氣質。',
+                mustEat: ['招牌龍蝦/海鮮黑松露義大利麵', '蒜辣海鮮義大利麵', '手工薄餅披薩', '經典提拉米蘇'],
                 mustBuy: [],
-                tips: ['Charoen Krung 42/1 巷口較窄，可就近停在 Shangri-La 或周邊公有停車處']
+                tips: ['從 Warehouse 30 漫步走過來約 8-10 分鐘']
               },
               {
                 type: '景點',
@@ -349,7 +349,7 @@
                 story: '耗資 540 億泰銖打造的旗艦地標，G 樓把泰國 77 府傳統水上市場搬入室內，戶外露台可俯瞰迷人的昭披耶河黃昏美景。',
                 mustEat: ['泰式香脆可麗餅 (Khanom Buang)', '現剖泰國香水椰子'],
                 mustBuy: ['ICONCRAFT 泰國國寶級工藝品', 'Karmakamet 香氛'],
-                tips: ['室內停車位充裕，戶外有水舞燈光秀']
+                tips: ['可從石龍軍路碼頭搭乘接駁船直達，或直接叫車至商場 1 號門落客區']
               }
             ]
           },
@@ -364,21 +364,21 @@
                 title: 'The Commons Thonglor (清水模開放式聚落)',
                 locationQuery: 'The Commons Thonglor Bangkok',
                 bookingCode: '',
-                story: '輕鬆無負擔的一天！睡到自然醒後前往通羅的指標性清水模社區，階梯平台通風極佳，聚集眾多特色精品咖啡與早午餐。',
-                mustEat: ['Roast 手沖咖啡與早午餐', '冷萃咖啡', '鬆餅'],
+                story: '睡到自然醒後叫車前往通羅知名清水模社群空間，半戶外階梯平台通風極佳，聚集眾多特色精品咖啡與優質早午餐。',
+                mustEat: ['Roast 手沖咖啡與早午餐', '冷萃咖啡', '草莓鬆餅'],
                 mustBuy: ['泰國獨立設計香氛', '文創插畫小品'],
-                tips: ['附設地下收費停車場，午後伴隨微風非常舒適']
+                tips: ['離民宿叫車約 5-8 分鐘即可抵達']
               },
               {
                 type: '咖啡廳',
                 time: '15:00',
-                title: '通羅 & 伊卡邁巷弄潮流咖啡隨意晃晃',
+                title: '通羅 & 伊卡邁巷弄潮流咖啡隨意漫遊',
                 locationQuery: 'Sukhumvit 55 Thonglor Bangkok',
                 bookingCode: '',
-                story: '不趕行程的午後時光，在住處所在的 Thonglor - Ekkamai 潮流街區隨意找家質感咖啡館坐坐聊天，享受慢活旅行步調。',
+                story: '不趕行程的放鬆午後，在 Thonglor - Ekkamai 潮流街區隨意找家質感咖啡館坐坐聊天，享受放空的度假時光。',
                 mustEat: ['特調冰美式', '手作戚風蛋糕'],
                 mustBuy: [],
-                tips: ['巷內步行注意機車，累了隨時可進店吹冷氣休息']
+                tips: ['短程移動可使用 Bolt / Grab 叫機車雙載或一般汽車']
               },
               {
                 type: '餐廳',
@@ -386,10 +386,10 @@
                 title: 'Here Hai (米其林必比登巨量蟹肉炒飯)',
                 locationQuery: 'Here Hai Restaurant Bangkok',
                 bookingCode: '',
-                story: '就在 Ekkamai 路上！以豪邁覆蓋整盤爆炒蟹肉、爆香皮皮蝦炒飯聞名全球的米其林推薦傳奇美食。',
+                story: '就在 Ekkamai 路上！以豪邁覆蓋整盤爆炒蟹肉、爆香皮皮蝦炒飯聞名全球的米其林傳奇美食。',
                 mustEat: ['招牌巨量蟹肉炒飯 (Crab Fried Rice)', '香蒜黑胡椒皮皮蝦', '香脆炸五花肉'],
                 mustBuy: [],
-                tips: ['座位有限，建議提早抵達或先向店員登記候位']
+                tips: ['離 Airbnb 非常近，步行或短程叫車皆可，建議提早抵達登記候位']
               }
             ]
           },
@@ -404,10 +404,10 @@
                 title: 'Central World 旗艦商場 & Big C 伴手禮掃貨',
                 locationQuery: 'Central World Bangkok',
                 bookingCode: '',
-                story: '不排戶外景點，直接享受室內冷氣與購物樂趣！從曼谷最大旗艦購物商場一路逛到對面的 Big C Supercenter，一次補齊所有泰國零食與特色商品。',
+                story: '市區室內血拼採買！從曼谷最大旗艦購物商場一路逛到對面的 Big C Supercenter，一次買齊所有泰國零食、香氛與特色品牌。',
                 mustEat: ['Nara Thai Cuisine 泰式炒河粉', 'After You 蜜糖吐司', '手標泰式冰奶茶'],
-                mustBuy: ['Gentlewoman 帆布包', '皇家蜂蜜 / 牛奶片', '小老闆海苔各類限定口味'],
-                tips: ['商場提供充裕室內停車位，大件採買後可直接放進後車廂']
+                mustBuy: ['Gentlewoman 帆布包', '皇家蜂蜜 / 牛奶片', '小老闆海苔限定口味'],
+                tips: ['採買大量伴手禮後叫車，建議定位在 Central World Centara Grand 飯店大廳門口上下車，避免路邊大塞車']
               },
               {
                 type: '休閒',
@@ -415,10 +415,10 @@
                 title: 'Tichuca Rooftop Bar (高空水母酒吧放鬆)',
                 locationQuery: 'Tichuca Rooftop Bar T-One Building Bangkok',
                 bookingCode: '',
-                story: '位於 T-One 大樓 46 樓的高空酒吧，標誌性的發光 LED 巨型水母樹隨風搖曳，吹著晚風微醺俯瞰曼谷都會繁華夜景。',
+                story: '位於 T-One 大樓 46 樓的高空酒吧，標誌性的發光 LED 巨型水母樹隨風搖曳，吹著微風俯瞰曼谷迷人夜景。',
                 mustEat: ['招牌百香果熱帶調酒', '新鮮椰子雞尾酒'],
                 mustBuy: [],
-                tips: ['著正式休閒服（禁止拖鞋短褲背心），需攜帶護照或護照照片備查']
+                tips: ['著正式休閒服（禁止拖鞋短褲背心），叫車定位在 T-One Building']
               }
             ]
           },
@@ -433,10 +433,10 @@
                 title: '曼谷質感早午餐 & 悠閒午後咖啡時光',
                 locationQuery: 'Ekkamai Bangkok',
                 bookingCode: '',
-                story: '市區輕鬆漫遊，睡飽後在 Ekkamai 附近挑選一間氣氛舒適的早午餐店，享受無行程壓力的純度假感。',
+                story: '睡飽後在民宿周邊或 Ekkamai 附近挑選一間早午餐店，享受無行程壓力的純度假節奏。',
                 mustEat: ['酪梨吐司早午餐', '手沖單品咖啡'],
                 mustBuy: [],
-                tips: ['自駕近處代步或步行漫遊皆合適']
+                tips: ['在 Airbnb 周圍步行漫遊或隨叫隨走']
               },
               {
                 type: '餐廳',
@@ -444,10 +444,10 @@
                 title: 'Somtum Der (米其林泰東北特色料理)',
                 locationQuery: 'Somtum Der Thonglor Bangkok',
                 bookingCode: '',
-                story: '深獲國際肯定的依善料理名店！專精道地泰東北風味沙拉、香脆多汁炸雞與香烤豬頸肉，滋味爽口過癮。',
+                story: '深獲國際肯定的泰國東北料理名店！專精道地依善風味沙拉、香脆炸雞翅與香烤豬頸肉，滋味酸辣過癮。',
                 mustEat: ['Der 招牌炸雞翅', '鹹蛋青木瓜絲沙拉', '香茅烤豬頸肉配糯米飯'],
                 mustBuy: [],
-                tips: ['近 Thong Lo 區，晚餐後散步或開車返回 Airbnb 僅幾分鐘路程']
+                tips: ['位於 Thong Lo 區，叫車車程約 5 分鐘即可返回 Airbnb']
               }
             ]
           },
@@ -462,10 +462,10 @@
                 title: '曼谷當代藝術館 (MOCA Bangkok)',
                 locationQuery: 'Museum of Contemporary Art (MOCA BANGKOK)',
                 bookingCode: '',
-                story: '白色極簡階梯與天井光影營造出超現實殿堂感，收藏豐富的泰國當代藝術巨作，室內冷氣舒適且非常適合拍照取景。',
-                mustEat: ['MOCA 精品館內美式手沖'],
+                story: '白色極簡階梯與天井光影營造出超現實殿堂感，收藏豐富的泰國當代藝術巨作，室內冷氣充足且非常適合拍照取景。',
+                mustEat: ['MOCA 精品館內手沖咖啡'],
                 mustBuy: ['當代藝術明信片與展覽紀念畫冊'],
-                tips: ['附設廣大室內地下免費停車場，空間寬敞安靜']
+                tips: ['MOCA 距離市中心稍遠，建議直接叫 Bolt/Grab 走快速道路直達']
               },
               {
                 type: '放鬆',
@@ -473,10 +473,10 @@
                 title: '泰式古法精油按摩舒壓',
                 locationQuery: 'Let\'s Relax Spa Thonglor Bangkok',
                 bookingCode: '',
-                story: '在旅行倒數第二天安排 2 小時泰式草藥球精油芳療，徹底卸下旅行疲憊。',
+                story: '在旅行倒數第二天安排 2 小時泰式草藥球精油芳療，徹底卸下逛街疲憊。',
                 mustEat: ['療程結束後附贈的溫熱芒果糯米飯'],
                 mustBuy: ['草藥舒緩膏', '香氛沐浴精油'],
-                tips: ['需提前透過官網或電話確認預約時段']
+                tips: ['需提前透過官網預約時段，按摩結束後叫車回住處整理行李']
               },
               {
                 type: '餐廳',
@@ -487,7 +487,7 @@
                 story: '泰國 50 年老字號海鮮餐廳，在清幽的庭院水景玻璃屋中享受最經典的泰味海鮮大餐。',
                 mustEat: ['招牌黃金濃咖哩炒蟹 (可去殼)', '泰式酸辣生蝦', '冬蔭功鮮蝦湯'],
                 mustBuy: [],
-                tips: ['附設專用平整露天停車場，停車極為便利']
+                tips: ['位於 Sukhumvit 26，叫車直接停在大門落客廊道']
               }
             ]
           },
@@ -502,21 +502,21 @@
                 title: 'Airbnb Check-out 退房',
                 locationQuery: '29 Soi Charoen Mit, Khlong Tan Nuea, Watthana, Bangkok',
                 bookingCode: '',
-                story: '檢查隨身重要證件、護照、充電器及伴手禮，整理行李準備前往機場。',
+                story: '檢查隨身貴重證件、護照、充電器及伴手禮，整理行李並提前預約叫車前往機場。',
                 mustEat: [],
                 mustBuy: [],
-                tips: ['確認帶齊隨身貴重行李與免稅退稅單 (PP10)']
+                tips: ['建議提早 15-20 分鐘在 App 上預約 Grab/Bolt 以免等車']
               },
               {
                 type: '交通',
-                time: '10:30',
-                title: '抵達蘇凡納布機場 (BKK) 還車 & 辦理登機',
+                time: '10:15 - 11:00',
+                title: '叫車直達蘇凡納布機場 (BKK) & 辦理登機',
                 locationQuery: 'Suvarnabhumi Airport Bangkok',
                 bookingCode: 'CI832',
-                story: '自駕還車前請於機場周邊加油站加滿油。兩人一同搭乘華航 CI832 返台，預留足夠時間辦理 VAT 退稅審查與免稅品提領。',
+                story: '兩人搭車前往機場搭乘華航 CI832 返台。預留充裕時間至 4 樓報到大廳辦理行李托運、退稅審查與免稅品提領。',
                 mustEat: ['機場候機室芒果糯米飯'],
                 mustBuy: ['機場免稅煙酒及泰國香氛禮盒'],
-                tips: ['13:20 起飛，務必於 11:00 前完成還車與行李托運手續']
+                tips: ['13:20 起飛，務必於 11:00 前抵達機場 4 樓出境大廳']
               }
             ]
           }
