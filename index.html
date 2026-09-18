@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0284c7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Bangkok Trip 曼谷旅遊隨身助手</title>
+  
+  <!-- Web App Manifest (可內嵌) -->
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQmFuZ2tvayBUcmlwIiwiY29sb3IiOiIjMDI4NGM3Iiwic3RhcnRfdXJsIjoiLi8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSJ9">
+  
+  <!-- Tailwind CSS & Lucide Icons & Vue 3 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans pb-24">
+  <div id="app" class="max-w-md mx-auto min-h-screen bg-slate-50 shadow-md">
+    
+    <!-- 頂部 Header -->
+    <header class="sticky top-0 z-50 bg-sky-600 text-white p-4 shadow flex items-center justify-between">
+      <div>
+        <h1 class="text-xl font-bold tracking-wide">🇹🇭 Bangkok Trip</h1>
+        <p class="text-xs text-sky-100">隨身行程、自駕導航與記帳助理</p>
+      </div>
+      <button @click="installApp" v-if="deferredPrompt" class="bg-sky-700 px-2 py-1 text-xs rounded shadow">安裝App</button>
+    </header>
+
+    <!-- TAB 1: 每日行程 -->
+    <main v-if="activeTab === 'itinerary'" class="p-4 space-y-4">
+      <!-- 日期切換 Tab -->
+      <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <button 
+          v-for="(day, idx) in days" :key="idx"
+          @click="selectedDayIdx = idx"
+          :class="['px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all shadow-sm', 
+                   selectedDayIdx === idx ? 'bg-sky-600 text-white shadow-sky-200' : 'bg-white text-slate-600']">
+          {{ day.dateLabel }}
+        </button>
+      </div>
+
+      <!-- 當日天氣區塊 -->
+      <div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-2xl p-4 shadow-sm flex items-center justify-between">
+        <div>
+          <div class="text-xs text-sky-100">曼谷即時預報 ({{ currentDay.date }})</div>
+          <div class="text-2xl font-bold mt-1">{{ currentDay.weather.temp }}°C・{{ currentDay.weather.condition }}</div>
+          <div class="text-xs text-sky-100 mt-1">濕度 {{ currentDay.weather.humidity }}% | 降雨機率 {{ currentDay.weather.rainPop }}%</div>
+        </div>
+        <div class="text-4xl">{{ currentDay.weather.icon }}</div>
+      </div>
+
+      <!-- 行程卡片列表 -->
+      <div class="space-y-4">
+        <div v-for="(item, i) in currentDay.items" :key="i" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 relative">
+          <!-- 分類標籤 & 時間 -->
+          <div class="flex items-center justify-between mb-2">
+            <span :class="['text-xs px-2.5 py-1 rounded-full font-bold', getCategoryStyle(item.type)]">
+              {{ item.type }}
+            </span>
+            <span class="text-xs font-medium text-slate-600">{{ item.time }}</span>
+          </div>
+
+          <!-- 名稱與導航按鈕 -->
+          <div class="flex items-start justify-between gap-2 mt-1">
+            <h3 class="font-bold text-base text-slate-800">{{ item.title }}</h3>
+            <a :href="getNavigationUrl(item.locationQuery)" target="_blank" 
+               class="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm font-semibold transition shrink-0">
+              🧭 導航
+            </a>
+          </div>
+
+          <!-- 重要預約代號 Highlight -->
+          <div v-if="item.bookingCode" class="mt-2.5 bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-mono flex items-center justify-between">
+            <span>預約代號: <strong class="text-amber-900 text-sm tracking-wider">{{ item.bookingCode }}</strong></span>
+            <button @click="copyText(item.bookingCode)" class="text-xs text-amber-600 hover:underline">複製</button>
+          </div>
+
+          <!-- 景點故事 & 攻略 -->
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            {{ item.story }}
+          </p>
+
+          <!-- 必吃/必買/攻略亮顯標籤 -->
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span v-for="tag in item.mustEat" class="text-[11px] bg-rose-50 text-rose-600 border border-rose-200 px-2 py-0.5 rounded-md font-medium">
+              🍜 必吃: <strong>{{ tag }}</strong>
+            </span>
+            <span v-for="tag in item.mustBuy" class="text-[11px] bg-purple-50 text-purple-600 border border-purple-200 px-2 py-0.5 rounded-md font-medium">
+              🛍️ 必買: <strong>{{ tag }}</strong>
+            </span>
+            <span v-for="tag in item.tips" class="text-[11px] bg-indigo-50 text-indigo-600 border border-indigo-200 px-2 py-0.5 rounded-md font-medium">
+              💡 {{ tag }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 2: 行程工具箱 (航班、住宿、急難救助、記帳) -->
+    <main v-if="activeTab === 'tools'" class="p-4 space-y-4">
+      <!-- 航班與住宿資訊 -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+        <h2 class="font-bold text-sm text-slate-800 mb-3 flex items-center gap-1.5">
+          ✈️ 航班 & 住宿資訊
+        </h2>
+        <div class="space-y-2.5 text-xs text-slate-600">
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div class="font-semibold text-slate-800">去程航班</div>
+            <div>中華航空 CI835 / 桃機 (TPE) 09:30 ➔ 蘇凡納布 (BKK) 12:15</div>
+            <div class="text-slate-600 mt-1 font-mono">訂位代號: <strong class="text-sky-600">ABC123XYZ</strong></div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+            <div class="font-semibold text-slate-800">住宿資訊 (Airbnb / 飯店)</div>
+            <div>Bangkok Sukhumvit Condominium / BTS Asok 站步行 5 分鐘</div>
+            <div class="mt-1">地址：Sukhumvit Soi 21, Khlong Toei Nuea, Bangkok</div>
+            <a :href="getNavigationUrl('Sukhumvit Soi 21 Bangkok')" target="_blank" class="inline-block mt-2 text-emerald-600 font-semibold underline">導航到住處</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 緊急聯絡電話 -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+        <h2 class="font-bold text-sm text-red-600 mb-3 flex items-center gap-1.5">
+          🚨 泰國緊急聯絡電話
+        </h2>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <a href="tel:1155" class="p-3 bg-red-50 text-red-700 rounded-xl font-bold flex flex-col items-center">
+            <span>觀光警察 (中文/英文)</span>
+            <span class="text-base font-mono mt-0.5">📞 1155</span>
+          </a>
+          <a href="tel:191" class="p-3 bg-red-50 text-red-700 rounded-xl font-bold flex flex-col items-center">
+            <span>警察報警局</span>
+            <span class="text-base font-mono mt-0.5">📞 191</span>
+          </a>
+          <a href="tel:1669" class="p-3 bg-red-50 text-red-700 rounded-xl font-bold flex flex-col items-center">
+            <span>醫療急救救護車</span>
+            <span class="text-base font-mono mt-0.5">📞 1669</span>
+          </a>
+          <a href="tel:+66816664006" class="p-3 bg-red-50 text-red-700 rounded-xl font-bold flex flex-col items-center">
+            <span>駐泰國代表處急難救助</span>
+            <span class="text-xs font-mono mt-0.5">📞 081-666-4006</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 記帳與預算工具 -->
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+            💰 預算與記帳本
+          </h2>
+          <div class="text-xs text-slate-600 font-medium">
+            總支出: <strong class="text-rose-600 text-sm font-mono">{{ totalExpense.toLocaleString() }}</strong> THB
+          </div>
+        </div>
+
+        <!-- 輸入欄位 -->
+        <div class="flex gap-2 mb-3">
+          <input v-model="newExpense.item" placeholder="品項 (如: 芒果糯米飯)" class="flex-1 text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white outline-none">
+          <input v-model.number="newExpense.amount" type="number" placeholder="金額 THB" class="w-24 text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white outline-none">
+          <button @click="addExpense" class="bg-sky-600 text-white text-xs px-3 rounded-xl font-semibold shadow-sm">+</button>
+        </div>
+
+        <!-- 支出明細清單 -->
+        <div class="space-y-1.5 max-h-48 overflow-y-auto">
+          <div v-for="(exp, idx) in expenses" :key="idx" class="flex justify-between items-center text-xs p-2 bg-slate-50 rounded-lg">
+            <span class="text-slate-700">{{ exp.item }}</span>
+            <div class="flex items-center gap-3">
+              <span class="font-mono font-semibold text-slate-900">{{ exp.amount }} THB</span>
+              <button @click="removeExpense(idx)" class="text-slate-600 hover:text-red-500">✕</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部固定導航欄 -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur border-t border-slate-200 py-2 flex justify-around shadow-lg z-50">
+      <button @click="activeTab = 'itinerary'" 
+              :class="['flex flex-col items-center text-xs font-semibold', activeTab === 'itinerary' ? 'text-sky-600' : 'text-slate-600']">
+        <span class="text-lg">🗺️</span>
+        <span>每日行程</span>
+      </button>
+      <button @click="activeTab = 'tools'" 
+              :class="['flex flex-col items-center text-xs font-semibold', activeTab === 'tools' ? 'text-sky-600' : 'text-slate-600']">
+        <span class="text-lg">🧰</span>
+        <span>旅行工具箱</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    const { createApp, ref, computed, onMounted } = Vue;
+
+    createApp({
+      setup() {
+        const activeTab = ref('itinerary');
+        const selectedDayIdx = ref(0);
+        const deferredPrompt = ref(null);
+
+        // 範例行程資料 (支援景點、餐廳、交通分類，及亮顯標籤)
+        const days = ref([
+          {
+            dateLabel: 'Day 1 (9/26)',
+            date: '9月26日',
+            weather: { temp: 32, condition: '午後雷陣雨', humidity: 78, rainPop: 60, icon: '⛈️' },
+            items: [
+              {
+                type: '交通',
+                time: '12:30',
+                title: '蘇凡納布機場 (BKK) 取車自駕',
+                locationQuery: 'Suvarnabhumi Airport Car Rental',
+                bookingCode: 'HERTZ-TH-9821',
+                story: '取車時確認租車單包含 CDW 全險。泰國是右駕靠左行駛，注意高速公路收費站 (Easy Pass vs 灰色現金車道)。',
+                mustEat: [],
+                mustBuy: [],
+                tips: ['靠左行駛', '自備泰銖現金過路費']
+              },
+              {
+                type: '餐廳',
+                time: '14:30',
+                title: 'Savoey Seafood (尚味泰海鮮)',
+                locationQuery: 'Savoey Seafood Sukhumvit 26',
+                bookingCode: 'SAVOEY-BKK-04',
+                story: '超過 50 年老字號海鮮餐廳，招牌黃金咖哩螃蟹將蛋液與咖哩香料完美結合。',
+                mustEat: ['黃金咖哩炒蟹', '泰式生蝦', '香蕉花沙拉'],
+                mustBuy: [],
+                tips: ['蟹肉可請廚房代為去殼 (方便吃)']
+              },
+              {
+                type: '景點',
+                time: '18:00',
+                title: 'ICONSIAM 暹羅天地 (室內水上市場)',
+                locationQuery: 'ICONSIAM Bangkok',
+                bookingCode: '',
+                story: '斥資 540 億泰銖打造，G 樓將泰國 77 府的水上市場與傳統工藝直接搬進冷氣商場中。',
+                mustEat: ['碳烤香蕉', '泰式傳統香脆可麗餅 (Khanom Buang)'],
+                mustBuy: ['手標泰奶茶包', '香氛品牌 Karmakamet'],
+                tips: ['商場提供免費室內停車 2 小時']
+              }
+            ]
+          },
+          {
+            dateLabel: 'Day 2 (9/27)',
+            date: '9月27日',
+            weather: { temp: 33, condition: '多雲時晴', humidity: 72, rainPop: 30, icon: '⛅' },
+            items: [
+              {
+                type: '景點',
+                time: '09:00',
+                title: '鄭王廟 (Wat Arun / 黎明寺)',
+                locationQuery: 'Wat Arun Bangkok',
+                bookingCode: '',
+                story: '大城時期所建，主塔高達 82 米，塔身鑲嵌大量彩色陶瓷片，在朝陽與夕陽照射下格外耀眼。',
+                mustEat: ['鄭王廟限定花磚冰棒'],
+                mustBuy: ['泰服寫真周邊'],
+                tips: ['服裝需穿著過膝長褲或裙子，不得露肩']
+              },
+              {
+                type: '餐廳',
+                time: '12:30',
+                title: 'Thip Samai (鬼門炒河粉)',
+                locationQuery: 'Thip Samai Pad Thai Pratu Phi',
+                bookingCode: '',
+                story: '曼谷最具代表性的泰式炒河粉名店，以薄煎蛋皮包裹河粉、加入濃郁蝦油炭火拌炒聞名。',
+                mustEat: ['招牌蝦油蛋包炒河粉 (Superb Pad Thai)', '帶果肉鮮榨橙汁'],
+                mustBuy: [],
+                tips: ['店內橙汁每日依柳橙時價計費，必點']
+              }
+            ]
+          }
+        ]);
+
+        const currentDay = computed(() => days.value[selectedDayIdx.value]);
+
+        // 導航連結 (調用 Google Maps 導航 Scheme)
+        const getNavigationUrl = (query) => {
+          return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`;
+        };
+
+        // 卡片分類樣式
+        const getCategoryStyle = (type) => {
+          switch (type) {
+            case '景點': return 'bg-amber-100 text-amber-800';
+            case '餐廳': return 'bg-rose-100 text-rose-800';
+            case '交通': return 'bg-sky-100 text-sky-800';
+            default: return 'bg-slate-100 text-slate-800';
+          }
+        };
+
+        // 記帳本功能
+        const expenses = ref(JSON.parse(localStorage.getItem('bkk_expenses') || '[]'));
+        const newExpense = ref({ item: '', amount: null });
+
+        const totalExpense = computed(() => {
+          return expenses.value.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+        });
+
+        const addExpense = () => {
+          if (!newExpense.value.item || !newExpense.value.amount) return;
+          expenses.value.unshift({ ...newExpense.value });
+          localStorage.setItem('bkk_expenses', JSON.stringify(expenses.value));
+          newExpense.value = { item: '', amount: null };
+        };
+
+        const removeExpense = (index) => {
+          expenses.value.splice(index, 1);
+          localStorage.setItem('bkk_expenses', JSON.stringify(expenses.value));
+        };
+
+        const copyText = (txt) => {
+          navigator.clipboard.writeText(txt);
+          alert('預約代號已複製到剪貼簿！');
+        };
+
+        // PWA 安裝監聽
+        onMounted(() => {
+          window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt.value = e;
+          });
+        });
+
+        const installApp = () => {
+          if (deferredPrompt.value) {
+            deferredPrompt.value.prompt();
+            deferredPrompt.value = null;
+          }
+        };
+
+        return {
+          activeTab,
+          days,
+          selectedDayIdx,
+          currentDay,
+          getNavigationUrl,
+          getCategoryStyle,
+          expenses,
+          newExpense,
+          totalExpense,
+          addExpense,
+          removeExpense,
+          copyText,
+          deferredPrompt,
+          installApp
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
